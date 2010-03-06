@@ -232,20 +232,22 @@ Refer to the Mozilla site for implementation ideas: https://developer.mozilla.or
 For example:
 
 #rounded_box {
-	{exp:css3:borderRadius value="1em 2em 3em 4em"}
+  {exp:css3:borderRadius value="1em 2em 3em 4em"}
 }
 
 ...outputs:
 
--moz-border-radius:1em 2em 3em 4em;
-border-top-left-radius:1em;
-border-top-right-radius:2em;
-border-bottom-left-radius:3em;
-border-bottom-right-radius:4em;
--webkit-border-top-left-radius:1em;
--webkit-border-top-right-radius:2em;
--webkit-border-bottom-left-radius:3em;
--webkit-border-bottom-right-radius:4em;
+#rounded_box {
+  -moz-border-radius:1em 2em 3em 4em;
+  border-top-left-radius:1em;
+  border-top-right-radius:2em;
+  border-bottom-left-radius:3em;
+  border-bottom-right-radius:4em;
+  -webkit-border-top-left-radius:1em;
+  -webkit-border-top-right-radius:2em;
+  -webkit-border-bottom-left-radius:3em;
+  -webkit-border-bottom-right-radius:4em;
+}
 	
 MORE SAMPLES
 --------------------
