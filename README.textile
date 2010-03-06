@@ -12,10 +12,10 @@ Refer to the Mozilla site for implementation ideas: https://developer.mozilla.or
 
 For example:
 
-@{
-	#rounded_box {
-	{exp:css3:borderRadius value="1em 2em 3em 4em"}
-}@
+bc. {
+  #rounded_box {
+  {exp:css3:borderRadius value="1em 2em 3em 4em"}
+}
 
 ...outputs:
 
