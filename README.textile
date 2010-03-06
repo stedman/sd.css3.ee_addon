@@ -19,8 +19,7 @@ For example:
 
 ...outputs:
 
-@
--moz-border-radius:1em 2em 3em 4em;
+bc. -moz-border-radius:1em 2em 3em 4em;
 border-top-left-radius:1em;
 border-top-right-radius:2em;
 border-bottom-left-radius:3em;
@@ -29,7 +28,6 @@ border-bottom-right-radius:4em;
 -webkit-border-top-right-radius:2em;
 -webkit-border-bottom-left-radius:3em;
 -webkit-border-bottom-right-radius:4em;
-@	
 
 h2. More Samples
 
@@ -46,13 +44,11 @@ see https://developer.mozilla.org/en/CSS/-moz-background-size
 see https://developer.mozilla.org/en/CSS/-moz-border-image
 Note: Make sure you use 1 or 4 space-delimited values. Since cases where 2 or 3 values would make sense seemed so rare, I didn’t bother supporting those. Also, for horizontal/vertical radii, use the Mozilla slash style.
 
-@
-{exp:css3:borderRadius value="1em"}
+bc. {exp:css3:borderRadius value="1em"}
 {exp:css3:borderRadius value="1em 2em 3em 4em"}
 {exp:css3:borderRadius value="1em/1px"}
 {exp:css3:borderRadius value="1em 2em 3em 4em / 1px 2px 3px 4px"}
 see https://developer.mozilla.org/en/CSS/-moz-border-radius
-@
 
 @{exp:css3:boxShadow value="1px 2px 3px rgba(0,0,0,.5)"}@
 see https://developer.mozilla.org/en/CSS/-moz-box-shadow
