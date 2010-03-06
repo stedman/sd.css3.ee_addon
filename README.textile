@@ -1,0 +1,61 @@
+h1. CSS3
+
+For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes (supports Gecko, Konqueror, Opera, and Webkit).
+
+"Forum thread":http://expressionengine.com/forums/viewthread/148392/
+
+h2. Samples
+
+h3. Common usage
+
+Refer to the Mozilla site for implementation ideas: https://developer.mozilla.org/en/CSS_Reference/Mozilla_Extensions
+
+For example:
+
+@{
+	#rounded_box {
+	{exp:css3:borderRadius value="1em 2em 3em 4em"}
+}@
+
+...outputs:
+
+@
+-moz-border-radius:1em 2em 3em 4em;
+border-top-left-radius:1em;
+border-top-right-radius:2em;
+border-bottom-left-radius:3em;
+border-bottom-right-radius:4em;
+-webkit-border-top-left-radius:1em;
+-webkit-border-top-right-radius:2em;
+-webkit-border-bottom-left-radius:3em;
+-webkit-border-bottom-right-radius:4em;
+@	
+
+h2. More Samples
+
+@{exp:css3:backgroundClip value="content"}@
+see https://developer.mozilla.org/en/CSS/-moz-background-clip
+
+@{exp:css3:backgroundOrigin value="content"}@
+see https://developer.mozilla.org/en/CSS/-moz-background-origin
+
+@{exp:css3:backgroundSize value="100% 100%"}@
+see https://developer.mozilla.org/en/CSS/-moz-background-size
+
+@{exp:css3:borderImage value="url(image.png) 1px 2px 3px 4px"}@
+see https://developer.mozilla.org/en/CSS/-moz-border-image
+Note: Make sure you use 1 or 4 space-delimited values. Since cases where 2 or 3 values would make sense seemed so rare, I didn’t bother supporting those. Also, for horizontal/vertical radii, use the Mozilla slash style.
+
+@
+{exp:css3:borderRadius value="1em"}
+{exp:css3:borderRadius value="1em 2em 3em 4em"}
+{exp:css3:borderRadius value="1em/1px"}
+{exp:css3:borderRadius value="1em 2em 3em 4em / 1px 2px 3px 4px"}
+see https://developer.mozilla.org/en/CSS/-moz-border-radius
+@
+
+@{exp:css3:boxShadow value="1px 2px 3px rgba(0,0,0,.5)"}@
+see https://developer.mozilla.org/en/CSS/-moz-box-shadow
+
+@{exp:css3:boxSizing value="border-box"}@
+see https://developer.mozilla.org/en/CSS/box-sizing
