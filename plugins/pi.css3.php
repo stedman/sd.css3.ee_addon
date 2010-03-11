@@ -229,11 +229,8 @@ For example:
 ...outputs:
 
 #rounded_box {
+  border-radius:1em 2em 3em 4em;
   -moz-border-radius:1em 2em 3em 4em;
-  border-top-left-radius:1em;
-  border-top-right-radius:2em;
-  border-bottom-left-radius:3em;
-  border-bottom-right-radius:4em;
   -webkit-border-top-left-radius:1em;
   -webkit-border-top-right-radius:2em;
   -webkit-border-bottom-left-radius:3em;
@@ -273,9 +270,10 @@ see https://developer.mozilla.org/en/CSS/-moz-transform
 
 CHANGELOG
 --------------------
-1.1.0	2010-03-10	Added transform:rotate();. Corrected border-radius syntax for W3C CSS3 candidate.
-1.0.1	2010-03-05	Documentation cleanup.
-1.0		2010-03-05	Initial release.
+1.1.0 – 2010-03-10 – Added transform:rotate();. Corrected border-radius syntax for W3C CSS3 candidate.
+1.1.0 – 2010-03-10 – Added transform:rotate();. Corrected border-radius syntax for W3C CSS3 candidate.
+1.0.1 – 2010-03-05 – Documentation cleanup.
+1.0.0 – 2010-03-05 – Initial release.
 
 
 	<?php
