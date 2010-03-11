@@ -1,15 +1,32 @@
 <?php
+ini_set('display_errors', '1');
+
+
 $plugin_info = array(
 	'pi_name' => 'Css3',
-	'pi_version' => '1.0.1',
+	'pi_version' => '1.1.0',
 	'pi_author' => 'Steve Stedman',
 	'pi_author_url' => 'http://stedmandesign.com/',
-	'pi_description' => 'For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes (supports Gecko, Konqueror, Opera, and Webkit).',
+	'pi_description' => 'For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes. Supports Gecko (Firefox, moz), Konqueror (khtml), Presto (Opera, o), and Webkit (Safari, Chrome, webkit).',
 	'pi_usage' => Css3::usage()
 );
 
 class Css3 {
 	var $vendor_prefix;
+	
+	function property_factory($property, $vendor_prefix = array('', '-moz-', '-webkit-'))
+	{
+		global $TMPL;
+		
+		$values = $TMPL->fetch_param('value');
+
+		foreach($vendor_prefix as $prefix) {
+			$css_array[] = $prefix . $property . ':' . $values . ';';
+		}
+
+		return implode("\n", $css_array);
+	}
+
 
 	/*
 		background-clip
@@ -60,17 +77,7 @@ class Css3 {
 	*/
 	function backgroundSize()
 	{
-		global $TMPL;
-		
-		$vendor_prefix = array('', '-khtml-', '-moz-', '-o-', '-webkit-');
-		
-		$values = $TMPL->fetch_param('value');
-
-		foreach($vendor_prefix as $prefix) {
-			$css_array[] = $prefix . 'background-size:' . $values . ';';
-		}
-
-		return implode("\n", $css_array);
+		return $this->property_factory('background-size', array('', '-khtml-', '-moz-', '-o-', '-webkit-'));
 	}
 
 	/*
@@ -80,17 +87,7 @@ class Css3 {
 	*/
 	function borderImage()
 	{
-		global $TMPL;
-		
-		$vendor_prefix = array('', '-moz-', '-webkit-');
-		
-		$values = $TMPL->fetch_param('value');
-
-		foreach($vendor_prefix as $prefix) {
-			$css_array[] = $prefix . 'border-image:' . $values . ';';
-		}
-
-		return implode("\n", $css_array);
+		return $this->property_factory('border-image');
 	}
 
 	/*
@@ -104,14 +101,16 @@ class Css3 {
 		
 		$values = $TMPL->fetch_param('value');
 
+		$vendor_prefix = array('', '-moz-');
+
 		$css_array = array();
 
-		// push Gecko values thru without change
-		$css_array[] = '-moz-border-radius:' . $values . ';';
+		// push non-webkit values thru without change
+		foreach($vendor_prefix as $prefix) {
+			$css_array[] = $prefix . 'border-radius:' . $values . ';';
+		}
 
-		// prepare for other browsers
-		$vendor_prefix = array('', '-webkit-');
-		
+		// get ready for webkit
 		// check for the horizontal/vertical radii slash
 		$slash = '&#47;';
 		if (strpos($values, $slash) !== FALSE) {
@@ -136,14 +135,12 @@ class Css3 {
 		} 
 		
 		else {
-			// bust up the Mozilla shorthand
+			// bust up the Gecko-style shorthand
 			$values_e = explode(' ', $values);
 			$values_size = sizeof($values_e);
 		
 			if ($values_size == 1) {
-				foreach($vendor_prefix as $prefix) {
-					$css_array[] = $prefix . 'border-radius:' . $values . ';';
-				}
+				$css_array[] = '-webkit-border-radius:' . $values . ';';
 			}
 			elseif ($values_size == 4) {
 				$css_array = array_merge($css_array, build_css($values_e));
@@ -152,21 +149,15 @@ class Css3 {
 		
 		if (!function_exists('build_css')) {
 			function build_css($val) {
-				global $vendor_prefix;
-
 				if (count($val) > 1) {
-					foreach($vendor_prefix as $prefix) {
-						$css_array[] = $prefix . 'border-top-left-radius:' . $val[0] . ';';
-						$css_array[] = $prefix . 'border-top-right-radius:' . $val[1] . ';';
-						$css_array[] = $prefix . 'border-bottom-left-radius:' . $val[2] . ';';
-						$css_array[] = $prefix . 'border-bottom-right-radius:' . $val[3] . ';';
-					}				
+					$css_array[] = '-webkit-border-top-left-radius:' . $val[0] . ';';
+					$css_array[] = '-webkit-border-top-right-radius:' . $val[1] . ';';
+					$css_array[] = '-webkit-border-bottom-left-radius:' . $val[2] . ';';
+					$css_array[] = '-webkit-border-bottom-right-radius:' . $val[3] . ';';
 					return $css_array;				
 				} 
 				else {
-					foreach($vendor_prefix as $prefix) {
-						$css_array[] = $prefix . 'border-radius:' . $val . ';';
-					}
+					$css_array[] = '-webkit-border-radius:' . $val . ';';
 					return $css_array;				
 				}
 			}
@@ -181,17 +172,7 @@ class Css3 {
 	*/
 	function boxShadow()
 	{
-		global $TMPL;
-		
-		$vendor_prefix = array('', '-moz-', '-webkit-');
-		
-		$values = $TMPL->fetch_param('value');
-
-		foreach($vendor_prefix as $prefix) {
-			$css_array[] = $prefix . 'box-shadow:' . $values . ';';
-		}
-
-		return implode("\n", $css_array);
+		return $this->property_factory('box-shadow');
 	}
 
 	/*
@@ -201,14 +182,24 @@ class Css3 {
 	*/
 	function boxSizing()
 	{
+		return $this->property_factory('box-sizing');
+	}
+
+	/*
+		transform: rotate()
+		http://www.w3.org/TR/css3-ui/#box-sizing
+		https://developer.mozilla.org/en/CSS/box-sizing
+	*/
+	function transformRotate()
+	{
 		global $TMPL;
 		
-		$vendor_prefix = array('', '-moz-', '-webkit-');
+		$vendor_prefix = array('', '-moz-', '-o-', '-webkit-');
 		
 		$values = $TMPL->fetch_param('value');
 		
 		foreach($vendor_prefix as $prefix) {
-			$css_array[] = $prefix . 'box-sizing:' . $values . ';';
+			$css_array[] = $prefix . 'transform:rotate(' . $values . ');';
 		}
 
 		return implode("\n", $css_array);
@@ -276,6 +267,16 @@ see https://developer.mozilla.org/en/CSS/-moz-box-shadow
 
 {exp:css3:boxSizing value="border-box"}
 see https://developer.mozilla.org/en/CSS/box-sizing
+
+{exp:css3:transformRotate value="10deg"}
+see https://developer.mozilla.org/en/CSS/-moz-transform
+
+CHANGELOG
+--------------------
+1.1.0	2010-03-10	Added transform:rotate();. Corrected border-radius syntax for W3C CSS3 candidate.
+1.0.1	2010-03-05	Documentation cleanup.
+1.0		2010-03-05	Initial release.
+
 
 	<?php
 		$buffer = ob_get_contents();

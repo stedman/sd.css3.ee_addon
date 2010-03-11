@@ -56,3 +56,12 @@ see https://developer.mozilla.org/en/CSS/-moz-box-shadow
 
 @{exp:css3:boxSizing value="border-box"}@
 see https://developer.mozilla.org/en/CSS/box-sizing
+
+@{exp:css3:transformRotate value="10deg"}@
+see https://developer.mozilla.org/en/CSS/-moz-transform
+
+h2. Changelog
+
+1.1.0	2010-03-10	Added transform:rotate();. Corrected border-radius syntax for W3C CSS3 candidate.
+1.0.1	2010-03-05	Documentation cleanup.
+1.0		2010-03-05	Initial release.
