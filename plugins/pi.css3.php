@@ -1,10 +1,7 @@
 <?php
-ini_set('display_errors', '1');
-
-
 $plugin_info = array(
 	'pi_name' => 'Css3',
-	'pi_version' => '1.1.0',
+	'pi_version' => '1.1.2',
 	'pi_author' => 'Steve Stedman',
 	'pi_author_url' => 'http://stedmandesign.com/',
 	'pi_description' => 'For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes. Supports Gecko (Firefox, moz), Konqueror (khtml), Presto (Opera, o), and Webkit (Safari, Chrome, webkit).',
@@ -14,7 +11,14 @@ $plugin_info = array(
 class Css3 {
 	var $vendor_prefix;
 	
-	function property_factory($property, $vendor_prefix = array('', '-moz-', '-webkit-'))
+	/**
+	* Factory for building typical property with browser prefixes
+	*
+	* @param string $property The CSS3 property name
+	* @param array $vendor_prefix The browser prefixes to apply
+	* @return array
+	*/
+	function create_property($property, $vendor_prefix = array('', '-moz-', '-webkit-'))
 	{
 		global $TMPL;
 		
@@ -28,10 +32,12 @@ class Css3 {
 	}
 
 
-	/*
-		background-clip
-		http://www.w3.org/TR/css3-background/#background-clip
-		https://developer.mozilla.org/en/CSS/-moz-background-clip
+	/**
+	* Apply browser prefixes to background-clip property 
+	* see http://www.w3.org/TR/css3-background/#background-clip
+	* see https://developer.mozilla.org/en/CSS/-moz-background-clip
+	*
+	* @return string
 	*/
 	function backgroundClip()
 	{
@@ -49,10 +55,12 @@ class Css3 {
 		return implode("\n", $css_array);
 	}
 
-	/*
-		background-origin
-		http://www.w3.org/TR/css3-background/#background-origin
-		https://developer.mozilla.org/en/CSS/-moz-background-origin
+	/**
+	* Apply browser prefixes to background-origin property 
+	* see http://www.w3.org/TR/css3-background/#background-origin
+	* see https://developer.mozilla.org/en/CSS/-moz-background-origin
+	*
+	* @return string
 	*/
 	function backgroundOrigin()
 	{
@@ -70,30 +78,36 @@ class Css3 {
 		return implode("\n", $css_array);
 	}
 
-	/*
-		background-size
-		http://www.w3.org/TR/css3-background/#the-background-size
-		https://developer.mozilla.org/en/CSS/-moz-background-size
+	/**
+	* Apply browser prefixes to background-size property 
+	* see http://www.w3.org/TR/css3-background/#the-background-size
+	* see https://developer.mozilla.org/en/CSS/-moz-background-size
+	*
+	* @return string
 	*/
 	function backgroundSize()
 	{
-		return $this->property_factory('background-size', array('', '-khtml-', '-moz-', '-o-', '-webkit-'));
+		return $this->create_property('background-size', array('', '-khtml-', '-moz-', '-o-', '-webkit-'));
 	}
 
-	/*
-		border-image
-		http://www.w3.org/TR/css3-background/#the-border-image
-		https://developer.mozilla.org/en/CSS/-moz-border-image
+	/**
+	* Apply browser prefixes to border-image property 
+	* see http://www.w3.org/TR/css3-background/#the-border-image
+	* see https://developer.mozilla.org/en/CSS/-moz-border-image
+	*
+	* @return string
 	*/
 	function borderImage()
 	{
-		return $this->property_factory('border-image');
+		return $this->create_property('border-image');
 	}
 
-	/*
-		border-radius
-		http://www.w3.org/TR/css3-background/#border-radius
-		https://developer.mozilla.org/en/CSS/-moz-border-radius
+	/**
+	* Apply browser prefixes to border-radius property 
+	* see http://www.w3.org/TR/css3-background/#border-radius
+	* see https://developer.mozilla.org/en/CSS/-moz-border-radius
+	*
+	* @return string
 	*/
 	function borderRadius()
 	{
@@ -166,29 +180,35 @@ class Css3 {
 		return implode("\n", $css_array);
 	}
 
-	/*
-		box-shadow
-		https://developer.mozilla.org/en/CSS/-moz-box-shadow
+	/**
+	* Apply browser prefixes to box-shadow property 
+	* see https://developer.mozilla.org/en/CSS/-moz-box-shadow
+	*
+	* @return string
 	*/
 	function boxShadow()
 	{
-		return $this->property_factory('box-shadow');
+		return $this->create_property('box-shadow');
 	}
 
-	/*
-		box-sizing
-		http://www.w3.org/TR/css3-ui/#box-sizing
-		https://developer.mozilla.org/en/CSS/box-sizing
+	/**
+	* Apply browser prefixes to box-sizing property 
+	* see http://www.w3.org/TR/css3-ui/#box-sizing
+	* see https://developer.mozilla.org/en/CSS/box-sizing
+	*
+	* @return string
 	*/
 	function boxSizing()
 	{
-		return $this->property_factory('box-sizing');
+		return $this->create_property('box-sizing');
 	}
 
-	/*
-		transform: rotate()
-		http://www.w3.org/TR/css3-ui/#box-sizing
-		https://developer.mozilla.org/en/CSS/box-sizing
+	/**
+	* Apply browser prefixes to transform:rotate() property 
+	* see http://www.w3.org/TR/2009/WD-css3-2d-transforms-20091201/#transform-property
+	* see https://developer.mozilla.org/en/CSS/-moz-transform
+	*
+	* @return string
 	*/
 	function transformRotate()
 	{
@@ -205,10 +225,11 @@ class Css3 {
 		return implode("\n", $css_array);
 	}
 
-	// ----------------------------------------
-	//  Plugin Usage
-	// ----------------------------------------
-
+	/**
+	* How to use this plugin
+	*
+	* @return string
+	*/
 	function usage()
 	{
 		ob_start();
@@ -270,6 +291,7 @@ see https://developer.mozilla.org/en/CSS/-moz-transform
 
 CHANGELOG
 --------------------
+1.1.2 – 2010-03-11 – Applied PHPDoc style. Cleaned up docs. Deleted display_error.
 1.1.1 – 2010-03-10 – Documentation cleanup.
 1.1.0 – 2010-03-10 – Added transform:rotate();. Corrected border-radius syntax for W3C CSS3 candidate.
 1.0.1 – 2010-03-05 – Documentation cleanup.
@@ -283,6 +305,5 @@ CHANGELOG
 
 		return $buffer;
 	}
-	// END
 }
 ?>
