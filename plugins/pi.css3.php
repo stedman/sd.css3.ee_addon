@@ -270,7 +270,7 @@ see https://developer.mozilla.org/en/CSS/-moz-transform
 
 CHANGELOG
 --------------------
-1.1.0 – 2010-03-10 – Added transform:rotate();. Corrected border-radius syntax for W3C CSS3 candidate.
+1.1.1 – 2010-03-10 – Documentation cleanup.
 1.1.0 – 2010-03-10 – Added transform:rotate();. Corrected border-radius syntax for W3C CSS3 candidate.
 1.0.1 – 2010-03-05 – Documentation cleanup.
 1.0.0 – 2010-03-05 – Initial release.
