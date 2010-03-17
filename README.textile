@@ -27,6 +27,22 @@ bc. #rounded_box {
   -webkit-border-bottom-right-radius:4em;
 }
 
+And for IE, try:
+
+bc. &lt;!--[if IE 8]&gt;
+.shadow {
+  {exp:css3:boxShadow ie=&quot;8&quot; value=&quot;1px 2px 3px #666&quot;}	
+}
+&lt;![endif]--&gt;
+
+...which outputs:
+
+bc. &lt;!--[if IE 8]&gt;
+.shadow {
+  -ms-filter:&quot;progid:DXImageTransform.Microsoft.dropshadow(OffX=1px,OffY=2px,Color=&#x27;#666&#x27;)&quot;;
+}
+&lt;![endif]--&gt;
+
 h2. More Samples
 
 @{exp:css3:backgroundClip value="content"}@
@@ -57,8 +73,19 @@ see https://developer.mozilla.org/en/CSS/box-sizing
 @{exp:css3:transformRotate value="10deg"}@
 see https://developer.mozilla.org/en/CSS/-moz-transform
 
+h2. Internet Explorer Support
+
+add the 'ie' parameter with the values 6 or 8
+
+@{exp:css3:backgroundLinearGradient ie="8" value="top, #fff, #000"}@
+
+@{exp:css3:boxShadow ie="6" value="1px 2px 3px #666666"}@
+
+@{exp:css3:transformRotate ie="6" value="10deg"}@
+
 h2. Changelog
 
+2.0.0 – 2010-03-17 – Added IE support for background gradient, box-shadow, and rotation. Created EE2.0 version.
 1.1.2 – 2010-03-11 – Applied PHPDoc style. Cleaned up docs. Deleted display_error.
 1.1.1 – 2010-03-10 – Documentation cleanup.
 1.1.0 – 2010-03-10 – Added transform:rotate();. Corrected border-radius syntax for W3C CSS3 candidate.
