@@ -85,6 +85,7 @@ add the 'ie' parameter with the values 6 or 8
 
 h2. Changelog
 
+2.0.1 – 2010-03-18 – Fixed background gradient.
 2.0.0 – 2010-03-17 – Added IE support for background gradient, box-shadow, and rotation. Created EE2.0 version.
 1.1.2 – 2010-03-11 – Applied PHPDoc style. Cleaned up docs. Deleted display_error.
 1.1.1 – 2010-03-10 – Documentation cleanup.

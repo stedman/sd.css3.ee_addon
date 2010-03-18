@@ -1,25 +1,22 @@
 <?php
 /**
-* CSS3 plugin for ExpressionEngine 1.6.x
+* CSS3 plugin for ExpressionEngine 2.0.x
 *
 * @package	ExpressionEngine
 * @category	plugin
 * @author	Steve Stedman
 * @link		http://github.com/stedman/sd.css3.ee_addon
 */
-
 $plugin_info = array(
 	'pi_name' => 'Css3',
-	'pi_version' => '2.0.0',
+	'pi_version' => '2.0.1',
 	'pi_author' => 'Steve Stedman',
 	'pi_author_url' => 'http://stedmandesign.com/',
-	'pi_description' => 'For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes. Supports Gecko (Firefox, moz), Konqueror (khtml), Presto (Opera, o), and Webkit (Safari, Chrome, webkit).',
+'pi_description' => 'For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes. Supports Gecko (Firefox, moz), Konqueror (khtml), Presto (Opera, o), Trident (MS Internet Explorer, ms), and Webkit (Safari, Chrome, webkit).',
 	'pi_usage' => Css3::usage()
 );
 
 class Css3 {
-	var $vendor_prefix = '';
-	
 	/**
 	* Class constructor
 	*/
@@ -27,7 +24,7 @@ class Css3 {
 	{
 		$this->EE =& get_instance();
 	}
-	
+
 	/**
 	* Factory for building typical property with browser prefixes
 	*
@@ -37,7 +34,7 @@ class Css3 {
 	*/
 	function create_property($property, $vendor_prefix = array('', '-moz-', '-webkit-'))
 	{
-		$values = $this->EE->TMPL->fetch_param('value');
+		$values = $this->get_clean_param('value');
 
 		foreach($vendor_prefix as $prefix) {
 			$css_array[] = $prefix . $property . ':' . $values . ';';
@@ -46,9 +43,22 @@ class Css3 {
 		return implode("\n", $css_array);
 	}
 
+	/**
+	* Get template parameters, then remove whitespace after commas
+	*
+	* @param string
+	* @return string
+	*/
+	function get_clean_param($param)
+	{
+		$values = $this->EE->TMPL->fetch_param($param);
+
+		return str_replace(', ', ',', $values);
+	}
+
 
 	/**
-	* Apply browser prefixes to background-clip property 
+	* Apply browser prefixes to background-clip property
 	* see http://www.w3.org/TR/css3-background/#background-clip
 	* see https://developer.mozilla.org/en/CSS/-moz-background-clip
 	*
@@ -57,19 +67,19 @@ class Css3 {
 	function backgroundClip()
 	{
 		$vendor_prefix = array('', '-moz-', '-webkit-');
-		
-		$values = $this->EE->TMPL->fetch_param('value');
+
+		$values = $this->get_clean_param('value');
 
 		foreach($vendor_prefix as $prefix) {
 			$suffix = ($prefix === '-moz-') ? '' : '-box';
-			$css_array[] = $prefix . 'background-clip:' . $values . $suffix . ';';				
+			$css_array[] = $prefix . 'background-clip:' . $values . $suffix . ';';
 		}
 
 		return implode("\n", $css_array);
 	}
 
 	/**
-	* Apply browser prefixes to background-image:gradient property 
+	* Apply browser prefixes to background-image:gradient property
 	* see http://dev.w3.org/csswg/css3-images/#linear-gradients
 	* see https://developer.mozilla.org/en/CSS/-moz-linear-gradient
 	* see http://msdn.microsoft.com/en-us/library/ms532997(VS.85).aspx
@@ -78,20 +88,30 @@ class Css3 {
 	*/
 	function backgroundLinearGradient()
 	{
-		$values = $this->EE->TMPL->fetch_param('value');
-		$values_array = explode(',', $values);
+		$values = $this->get_clean_param('value');
+		// escape the commas inside of parenthesis (for rgb[a] and hsl)
+		$values_e = $values;
+		if (strpos($values_e, '(')) {
+			// actually, we're just looking for a series of one or more digits followed by commas
+			$values_e = preg_replace('/,(?=(?:\s?\.?\d+,?)+)/', '~', $values_e);
+		}
+		$values_array = explode(',', $values_e);
+		// go back and unescape the commas inside parenthesis
+		foreach($values_array as $key=>$val) {
+			$values_array[$key] = str_replace('~', ',', $val);
+		}
 
-		$ie = $this->EE->TMPL->fetch_param('ie');
+		$ie = $this->get_clean_param('ie');
 
 		if ($ie != '') {
 			// for Internet Explorer
 			$ie_css = "progid:DXImageTransform.Microsoft.gradient(startColorstr='{$values_array[1]}', endColorstr='{$values_array[2]}');";
-			
+
 			if ($ie == '8') {
 				return '-ms-filter:"' . rtrim($ie_css, ';') . '";';
 			}
 			else {
-				return 'filter:' . $ie_css;				
+				return 'filter:' . $ie_css;
 			}
 		}
 		else {
@@ -110,7 +130,7 @@ class Css3 {
 	}
 
 	/**
-	* Apply browser prefixes to background-origin property 
+	* Apply browser prefixes to background-origin property
 	* see http://www.w3.org/TR/css3-background/#background-origin
 	* see https://developer.mozilla.org/en/CSS/-moz-background-origin
 	*
@@ -119,19 +139,19 @@ class Css3 {
 	function backgroundOrigin()
 	{
 		$vendor_prefix = array('', '-moz-', '-webkit-');
-		
-		$values = $this->EE->TMPL->fetch_param('value');
+
+		$values = $this->get_clean_param('value');
 
 		foreach($vendor_prefix as $prefix) {
 			$suffix = ($prefix === '-moz-') ? '' : '-box';
-			$css_array[] = $prefix . 'background-origin:' . $values . $suffix . ';';				
+			$css_array[] = $prefix . 'background-origin:' . $values . $suffix . ';';
 		}
 
 		return implode("\n", $css_array);
 	}
 
 	/**
-	* Apply browser prefixes to background-size property 
+	* Apply browser prefixes to background-size property
 	* see http://www.w3.org/TR/css3-background/#the-background-size
 	* see https://developer.mozilla.org/en/CSS/-moz-background-size
 	*
@@ -143,7 +163,7 @@ class Css3 {
 	}
 
 	/**
-	* Apply browser prefixes to border-image property 
+	* Apply browser prefixes to border-image property
 	* see http://www.w3.org/TR/css3-background/#the-border-image
 	* see https://developer.mozilla.org/en/CSS/-moz-border-image
 	*
@@ -155,7 +175,7 @@ class Css3 {
 	}
 
 	/**
-	* Apply browser prefixes to border-radius property 
+	* Apply browser prefixes to border-radius property
 	* see http://www.w3.org/TR/css3-background/#border-radius
 	* see https://developer.mozilla.org/en/CSS/-moz-border-radius
 	*
@@ -163,13 +183,9 @@ class Css3 {
 	*/
 	function borderRadius()
 	{
-		global $TMPL, $vendor_prefix;
-		
-		$values = $this->EE->TMPL->fetch_param('value');
+		$values = $this->get_clean_param('value');
 
 		$vendor_prefix = array('', '-moz-');
-
-		$css_array = array();
 
 		// push non-webkit values thru without change
 		foreach($vendor_prefix as $prefix) {
@@ -185,26 +201,25 @@ class Css3 {
 			if (substr_count($values, ' ') <= 2) {
 				$value = preg_replace("/\s?{$slash}\s?/", ' ', $values);
 				$css_array = array_merge($css_array, build_css($value));
-			}	
+			}
 			else {
 				$values_slash = explode($slash, $values);
 				// now we should have an array with 2 values, break those up on the spaces
 				$values_slash_0 = explode(' ', trim($values_slash[0]));
 				$values_slash_1 = explode(' ', trim($values_slash[1]));
 				// combine the horizontal and vertical radii
-				$values_combined = array();
 				foreach ($values_slash_0 as $key => $value) {
 					$values_combined[] = $values_slash_0[$key] . ' ' . $values_slash_1[$key];
 				}
 				$css_array = array_merge($css_array, build_css($values_combined));
 			}
-		} 
-		
+		}
+
 		else {
 			// bust up the Gecko-style shorthand
 			$values_e = explode(' ', $values);
 			$values_size = sizeof($values_e);
-		
+
 			if ($values_size == 1) {
 				$css_array[] = '-webkit-border-radius:' . $values . ';';
 			}
@@ -212,7 +227,7 @@ class Css3 {
 				$css_array = array_merge($css_array, build_css($values_e));
 			}
 		}
-		
+
 		if (!function_exists('build_css')) {
 			function build_css($val) {
 				if (count($val) > 1) {
@@ -220,20 +235,20 @@ class Css3 {
 					$css_array[] = '-webkit-border-top-right-radius:' . $val[1] . ';';
 					$css_array[] = '-webkit-border-bottom-left-radius:' . $val[2] . ';';
 					$css_array[] = '-webkit-border-bottom-right-radius:' . $val[3] . ';';
-					return $css_array;				
-				} 
+					return $css_array;
+				}
 				else {
 					$css_array[] = '-webkit-border-radius:' . $val . ';';
-					return $css_array;				
+					return $css_array;
 				}
 			}
 		}
-		
+
 		return implode("\n", $css_array);
 	}
 
 	/**
-	* Apply browser prefixes to box-shadow property 
+	* Apply browser prefixes to box-shadow property
 	* see https://developer.mozilla.org/en/CSS/-moz-box-shadow
 	* see http://msdn.microsoft.com/en-us/library/ms532985(VS.85).aspx
 	*
@@ -241,19 +256,19 @@ class Css3 {
 	*/
 	function boxShadow()
 	{
-		$ie = $this->EE->TMPL->fetch_param('ie');
+		$ie = $this->get_clean_param('ie');
 
 		if ($ie != '') {
-			$values = $this->EE->TMPL->fetch_param('value');
+			$values = $this->get_clean_param('value');
 			$values_array = explode(' ', $values);
 
 			$ie_css = "progid:DXImageTransform.Microsoft.dropshadow(OffX={$values_array[0]},OffY={$values_array[1]},Color='{$values_array[3]}');";
-			
+
 			if ($ie == '8') {
 				return '-ms-filter:"' . rtrim($ie_css, ';') . '";';
 			}
 			else {
-				return 'filter:' . $ie_css;				
+				return 'filter:' . $ie_css;
 			}
 		}
 		else {
@@ -262,7 +277,7 @@ class Css3 {
 	}
 
 	/**
-	* Apply browser prefixes to box-sizing property 
+	* Apply browser prefixes to box-sizing property
 	* see http://www.w3.org/TR/css3-ui/#box-sizing
 	* see https://developer.mozilla.org/en/CSS/box-sizing
 	*
@@ -274,7 +289,7 @@ class Css3 {
 	}
 
 	/**
-	* Apply browser prefixes to transform:rotate() property 
+	* Apply browser prefixes to transform:rotate() property
 	* see http://www.w3.org/TR/2009/WD-css3-2d-transforms-20091201/#transform-property
 	* see https://developer.mozilla.org/en/CSS/-moz-transform
 	* see http://msdn.microsoft.com/en-us/library/ms533014(VS.85).aspx
@@ -283,9 +298,8 @@ class Css3 {
 	*/
 	function transformRotate()
 	{
-		$values = $this->EE->TMPL->fetch_param('value');
-		
-		$ie = $this->EE->TMPL->fetch_param('ie');
+		$values = $this->get_clean_param('value');
+		$ie = $this->get_clean_param('ie');
 
 		if ($ie != '') {
 			// get the rotation integer
@@ -293,17 +307,17 @@ class Css3 {
 			// prep for IE
 			$value_ie = round(($value_int / 90), 3);
 			$ie_css = "progid:DXImageTransform.Microsoft.BasicImage(rotation={$value_ie});";
-			
+
 			if ($ie == '8') {
 				return '-ms-filter:"' . rtrim($ie_css, ';') . '";';
 			}
 			else {
-				return 'filter:' . $ie_css;				
+				return 'filter:' . $ie_css;
 			}
 		}
 		else {
 			$vendor_prefix = array('', '-moz-', '-o-', '-webkit-');
-		
+
 			foreach($vendor_prefix as $prefix) {
 				$css_array[] = $prefix . 'transform:rotate(' . $values . ');';
 			}
@@ -348,14 +362,14 @@ For example:
 And for IE, try:
 <!--[if IE 8]>
 .shadow {
-  {exp:css3:boxShadow ie="8" value="1px 2px 3px #666666"}	
+  {exp:css3:boxShadow ie="8" value="1px 2px 3px #666"}
 }
 <![endif]-->
 
 ...which outputs:
 <!--[if IE 8]>
 .shadow {
-  -ms-filter:"progid:DXImageTransform.Microsoft.dropshadow(OffX=1px,OffY=2px,Color='#666666')";
+  -ms-filter:"progid:DXImageTransform.Microsoft.dropshadow(OffX=1px,OffY=2px,Color='#666')";
 }
 <![endif]-->
 
@@ -396,9 +410,9 @@ see https://developer.mozilla.org/en/CSS/box-sizing
 {exp:css3:transformRotate value="10deg"}
 see https://developer.mozilla.org/en/CSS/-moz-transform
 
-INTERNET EXPLORER SUPPORT
+IE SUPPORT
 --------------------
-add the 'ie' parameter with the values 6 or 8
+Add the 'ie' parameter with the values 6 (IE6, IE7) or 8 (IE8).
 
 {exp:css3:backgroundLinearGradient ie="8" value="top, #fff, #000"}
 
@@ -409,6 +423,7 @@ add the 'ie' parameter with the values 6 or 8
 
 CHANGELOG
 --------------------
+2.0.1 – 2010-03-18 – Fixed background gradient.
 2.0.0 – 2010-03-17 – Added IE support for background gradient, box-shadow, and rotation. Created EE2.0 version.
 1.1.2 – 2010-03-11 – Applied PHPDoc style. Cleaned up docs. Deleted display_error.
 1.1.1 – 2010-03-10 – Documentation cleanup.
