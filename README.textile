@@ -29,19 +29,19 @@ bc. #rounded_box {
 
 And for IE, try:
 
-bc. &lt;!--[if IE 8]&gt;
+bc. <!--[if IE 8]>
 .shadow {
-  {exp:css3:boxShadow ie=&quot;8&quot; value=&quot;1px 2px 3px #666&quot;}	
+  {exp:css3:boxShadow ie="8" value="1px 2px 3px #666"}	
 }
-&lt;![endif]--&gt;
+<![endif]-->
 
 ...which outputs:
 
-bc. &lt;!--[if IE 8]&gt;
+bc. <!--[if IE 8]>
 .shadow {
-  -ms-filter:&quot;progid:DXImageTransform.Microsoft.dropshadow(OffX=1px,OffY=2px,Color=&#x27;#666&#x27;)&quot;;
+  -ms-filter:"progid:DXImageTransform.Microsoft.dropshadow(OffX=1px,OffY=2px,Color='#666')";
 }
-&lt;![endif]--&gt;
+<![endif]-->
 
 h2. More Samples
 
@@ -75,7 +75,7 @@ see https://developer.mozilla.org/en/CSS/-moz-transform
 
 h2. Internet Explorer Support
 
-add the 'ie' parameter with the values 6 or 8
+Add the 'ie' parameter with the values 6 (IE6, IE7) or 8 (IE8).
 
 @{exp:css3:backgroundLinearGradient ie="8" value="top, #fff, #000"}@
 
