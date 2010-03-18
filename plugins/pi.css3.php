@@ -9,7 +9,7 @@
 */
 $plugin_info = array(
 	'pi_name' => 'Css3',
-	'pi_version' => '2.0.1',
+	'pi_version' => '2.0.2',
 	'pi_author' => 'Steve Stedman',
 	'pi_author_url' => 'http://stedmandesign.com/',
 	'pi_description' => 'For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes. Supports Gecko (Firefox, moz), Konqueror (khtml), Presto (Opera, o), Trident (MS Internet Explorer, ms), and Webkit (Safari, Chrome, webkit).',
@@ -286,6 +286,33 @@ class Css3 {
 	}
 
 	/**
+	* Create IE version of opacity 
+	*
+	* @return string
+	*/
+	function opacity()
+	{
+		$values = $this->get_clean_param('value');
+		$ie = $this->get_clean_param('ie');
+
+		if ($ie != '') {
+			// change value to IE's percentage integer
+			$value_ie = $values * 100;
+			$ie_css = "alpha(opacity={$value_ie})";
+
+			if ($ie == '8') {
+				return '-ms-filter:"' . $ie_css . '";';
+			}
+			else {
+				return 'filter:' . $ie_css . ';';
+			}
+		}
+		else {
+			return 'opacity:' . $values . ';';
+		}
+	}
+
+	/**
 	* Apply browser prefixes to transform:rotate() property 
 	* see http://www.w3.org/TR/2009/WD-css3-2d-transforms-20091201/#transform-property
 	* see https://developer.mozilla.org/en/CSS/-moz-transform
@@ -334,7 +361,7 @@ class Css3 {
 USAGE
 --------------------
 
-For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes (supports Gecko, Konqueror, Opera, and Webkit).
+For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes (supports Gecko, Konqueror, Opera, Trident, and Webkit).
 
 Refer to the Mozilla site for implementation ideas: https://developer.mozilla.org/en/CSS_Reference/Mozilla_Extensions
 
@@ -377,7 +404,7 @@ MORE SAMPLES
 see https://developer.mozilla.org/en/CSS/-moz-background-clip
 
 {exp:css3:backgroundLinearGradient value="top, #fff, #000"}
-{exp:css3:backgroundLinearGradient value="left, rgba(0,100,200,.5), rgba(200,200,200,.5)"}
+{exp:css3:backgroundLinearGradient value="left, rgba(0,10,20,.5), rgba(200,210,220,.5)"}
 see https://developer.mozilla.org/en/CSS/-moz-linear-gradient
 Note: this tag follows a very basic syntax: "top||left,color,color". For more complex gradients, including radial, you're on your own for now.
 
@@ -414,10 +441,13 @@ Add the 'ie' parameter with the values 6 (IE6, IE7) or 8 (IE8).
 
 {exp:css3:boxShadow ie="6" value="1px 2px 3px #666666"}
 
+{exp:css3:opacity ie="6" value="0.5"}
+
 {exp:css3:transformRotate ie="6" value="10deg"}
 
 CHANGELOG
 --------------------
+2.0.2 – 2010-03-18 — Added IE opacity.
 2.0.1 – 2010-03-18 – Fixed background gradient.
 2.0.0 – 2010-03-17 – Added IE support for background gradient, box-shadow, and rotation. Created EE2.0 version.
 1.1.2 – 2010-03-11 – Applied PHPDoc style. Cleaned up docs. Deleted display_error.

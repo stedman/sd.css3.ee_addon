@@ -1,6 +1,6 @@
 h1. CSS3
 
-For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes (supports Gecko, Konqueror, Opera, and Webkit).
+For each advanced CSS3 property, use this plugin in a CSS template to spew out all the supporting browser prefixes. Supports Gecko (Firefox, moz), Konqueror (khtml), Presto (Opera, o), Trident (MS Internet Explorer, ms), and Webkit (Safari, Chrome, webkit).
 
 "Forum thread":http://expressionengine.com/forums/viewthread/148392/
 
@@ -48,6 +48,11 @@ h2. More Samples
 @{exp:css3:backgroundClip value="content"}@
 see https://developer.mozilla.org/en/CSS/-moz-background-clip
 
+@{exp:css3:backgroundLinearGradient value="top, #fff, #000"}@
+@{exp:css3:backgroundLinearGradient value="left, rgba(0,10,20,.5), rgba(200,210,220,.5)"}@
+see https://developer.mozilla.org/en/CSS/-moz-linear-gradient
+Note: this tag follows a very basic syntax: "top||left,color,color". For more complex gradients, including radial, you're on your own for now.
+
 @{exp:css3:backgroundOrigin value="content"}@
 see https://developer.mozilla.org/en/CSS/-moz-background-origin
 
@@ -81,10 +86,13 @@ Add the 'ie' parameter with the values 6 (IE6, IE7) or 8 (IE8).
 
 @{exp:css3:boxShadow ie="6" value="1px 2px 3px #666666"}@
 
+@{exp:css3:opacity ie="6" value="0.5"}@
+
 @{exp:css3:transformRotate ie="6" value="10deg"}@
 
 h2. Changelog
 
+2.0.2 – 2010-03-18 — Added IE opacity.
 2.0.1 – 2010-03-18 – Fixed background gradient.
 2.0.0 – 2010-03-17 – Added IE support for background gradient, box-shadow, and rotation. Created EE2.0 version.
 1.1.2 – 2010-03-11 – Applied PHPDoc style. Cleaned up docs. Deleted display_error.
